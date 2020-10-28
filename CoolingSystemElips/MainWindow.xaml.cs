@@ -24,44 +24,94 @@ namespace CoolingSystemElips
         {
             InitializeComponent();
         }
-
-        byte maxNumberMotor = 4;
-
-        Motor[] motor = new Motor[4];
-        List<Motor> mot = new List<Motor>();
-
+      
+        Motor[] motor = new Motor[5];
+        
         private void tempOil_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var value = (((Xceed.Wpf.Toolkit.CommonNumericUpDown<int>)(sender)).Value);
-
+            var red = Brushes.Red;
+            var blue = Brushes.Blue; 
+           
             if (value != null)
             {
-                if (value > 72)
+                if (value > 75)
                 {
-                    if (motor[1].Status == motor[1].off) 
-                    {
-                        fan1.Fill = System.Windows.Media.Brushes.Red;
-                        motor[1].TurnOn();
-                    }
+                    fan1.Fill = red;
+                    motor[1].TurnOn();
                 }
                 else
                 {
-                    if (motor[1].Status == motor[1].on)
+                    if (value < 72) 
                     {
-                        fan1.Fill = System.Windows.Media.Brushes.Blue;
-                        motor[1].TurnOff();                        
+                        fan1.Fill = blue;
+                        motor[1].TurnOff();
+                    }
+                }
+                
+                if (value > 79) 
+                {
+                    fan2.Fill = red;
+                    motor[2].TurnOn();
+
+                    fan3.Fill = red;
+                    motor[3].TurnOn();
+                }
+                else 
+                {
+                    if (value < 75)
+                    {
+                        fan2.Fill = blue;
+                        motor[2].TurnOff();
+
+                        fan3.Fill = blue;
+                        motor[3].TurnOff();
                     }
                 }
 
-                WorkTimeFan1.Text = motor[1].WorkTime.ToString();
-                NumberTurnOnFan1.Text = motor[1].NumberTurnOn.ToString();
-            }
+                Draw();
 
+            }
         }
 
         private void tempWater_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            var value = (((Xceed.Wpf.Toolkit.CommonNumericUpDown<int>)(sender)).Value);
+            var red = Brushes.Red;
+            var blue = Brushes.Blue;
 
+            if (value != null) 
+            { 
+                if (value > 79) 
+                {
+                    fan4.Fill = red;
+                    motor[4].TurnOn();
+                }
+                else 
+                { 
+                    if (value < 76) 
+                    {
+                        fan4.Fill = blue;
+                        motor[4].TurnOff();
+                    }
+                }
+
+                if (value > 83) 
+                {
+                    fan3.Fill = red;
+                    motor[3].TurnOn();
+                }
+                else 
+                {
+                    if (value < 75) 
+                    {
+                        fan3.Fill = blue;
+                        motor[3].TurnOff();
+                    }
+                }
+
+                Draw();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -71,12 +121,6 @@ namespace CoolingSystemElips
                 for (byte i = 1; i <= motor.Length; i++)
                 {
                     motor[i - 1] = new Motor(i);
-                }
-
-                for (byte i = 0; i < maxNumberMotor; i++)
-                {
-                    Motor m = new Motor(i);
-                    mot.Add(m);
                 }
 
                 string[] testNumber = new string[4] { "1", "2", "3", "4" };
@@ -117,6 +161,21 @@ namespace CoolingSystemElips
         private void startStopTest_Unchecked(object sender, RoutedEventArgs e)
         {
             startStopTest.Content = "Запустить тест";
+        }
+
+        private void Draw() 
+        {
+            WorkTimeFan1.Text = motor[1].WorkTime.ToString();
+            NumberTurnOnFan1.Text = motor[1].NumberTurnOn.ToString();
+
+            WorkTimeFan2.Text = motor[2].WorkTime.ToString();
+            NumberTurnOnFan2.Text = motor[2].NumberTurnOn.ToString();
+
+            WorkTimeFan3.Text = motor[3].WorkTime.ToString();
+            NumberTurnOnFan3.Text = motor[3].NumberTurnOn.ToString();
+
+            WorkTimeFan4.Text = motor[4].WorkTime.ToString();
+            NumberTurnOnFan4.Text = motor[4].NumberTurnOn.ToString();
         }
     }
 }

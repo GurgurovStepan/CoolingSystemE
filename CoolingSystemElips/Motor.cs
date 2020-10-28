@@ -11,35 +11,45 @@ namespace CoolingSystemElips
         #region Константы
         
         /// <summary>
-        /// Включен - on = 1  
+        /// Включить - on = 1  
         /// </summary>
-        public readonly byte on = 1;
+        private readonly byte on = 1;
         /// <summary>
-        /// Отключен - off = 0
+        /// Отключить - off = 0
         /// </summary>
-        public readonly byte off = 0;
+        private readonly byte off = 0;
 
         #endregion
 
         #region Поля
 
         /// <summary>
-        /// Номер
+        /// Порядковый номер
         /// </summary>
         private byte number;
 
         /// <summary>
-        /// Состояние (вкл./откл.)
+        /// Команда: вкл. - 1 / откл. - 0 
         /// </summary>
         private byte status;
 
         /// <summary>
-        /// время работы
+        /// Состояние включен
+        /// </summary>
+        private bool statusOn;
+        
+        /// <summary>
+        /// Состояние отключен
+        /// </summary>
+        private bool statusOff;
+
+        /// <summary>
+        /// Время работы
         /// </summary>
         private UInt64 workTime;
 
         /// <summary>
-        /// количество включений
+        /// Количество включений
         /// </summary>
         private UInt32 numberTurnOn;
 
@@ -58,7 +68,6 @@ namespace CoolingSystemElips
         /// </summary>
         private TimeSpan workInterval;
 
-
         #endregion
 
         #region Свойства
@@ -74,9 +83,9 @@ namespace CoolingSystemElips
                 number = value;
             }
         }
-        
+
         /// <summary>
-        /// Состояние: 1 - on, 0 - off
+        /// Команда : вкл. - 1 / откл. - 0
         /// </summary>
         public byte Status
         {
@@ -89,6 +98,37 @@ namespace CoolingSystemElips
                status = value;
             }
         }
+       
+        /// <summary>
+        /// Состояние включен
+        /// </summary>
+        public bool StatusOn 
+        {
+            get 
+            {
+                return statusOn;
+            }
+            private set 
+            {
+                statusOn = value;
+            }
+        }
+
+        /// <summary>
+        /// Состояние отключен
+        /// </summary>
+        public bool StatusOff 
+        { 
+            get 
+            {
+                return statusOff;
+            }
+            private set 
+            {
+                statusOff = value;
+            }
+        }
+
         public UInt64 WorkTime
         {
             get
@@ -121,6 +161,8 @@ namespace CoolingSystemElips
         {
             Number = num;
             Status = off;
+            StatusOn = false;
+            StatusOff = true;
             WorkTime = 0;
             NumberTurnOn = 0;
 
@@ -140,8 +182,13 @@ namespace CoolingSystemElips
         /// </summary>
         public void TurnOn()
         {
-            Status = on;
-            startTime = DateTime.Now;
+            if (StatusOff)
+            {
+                Status = on;
+                StatusOn = true;
+                StatusOff = false;
+                startTime = DateTime.Now;
+            }
         }
 
         /// <summary>
@@ -149,10 +196,15 @@ namespace CoolingSystemElips
         /// </summary>
         public void TurnOff()
         {
-            CalculationNumberStarts();
-            Status = off;
-            stopTime = DateTime.Now;
-            CalculationWorkTime();
+            if (StatusOn)
+            {
+                Status = off;
+                StatusOn = false;
+                StatusOff = true;
+                stopTime = DateTime.Now;
+                CalculationWorkTime();
+                CalculationNumberStarts();
+            }
         }
 
         #endregion
@@ -163,18 +215,23 @@ namespace CoolingSystemElips
         /// </summary>
         private void CalculationWorkTime()
         {
-            workInterval = stopTime - startTime;
+            if (stopTime > startTime) 
+            {
+                workInterval = stopTime - startTime;
+            }
+            else 
+            {
+                workInterval = TimeSpan.Zero;
+            }
+            
             WorkTime = (UInt64)(workInterval.TotalSeconds) + WorkTime;
         }
         /// <summary>
         /// Расчет количесвтва включений мотора
         /// </summary>
         private void CalculationNumberStarts()
-        {
-            if (Status == on)
-            {
-                NumberTurnOn++;
-            }
+        { 
+            NumberTurnOn++;
         }
         #endregion
 

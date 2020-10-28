@@ -131,21 +131,21 @@
 
             <StackPanel Grid.Row="1" Grid.Column="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>Время работы:</TextBlock>
+                    <TextBlock>Время работы :</TextBlock>
                     <TextBlock Name="WorkTimeFan1">0</TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>Количество вкл.:</TextBlock>
+                    <TextBlock>Количество вкл :</TextBlock>
                     <TextBlock Name="NumberTurnOnFan1">0</TextBlock>
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="2" Grid.Column="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>Время работы:</TextBlock>
+                    <TextBlock>Время работы :</TextBlock>
                     <TextBlock Name="WorkTimeFan2">0</TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>Количество вкл.:</TextBlock>
+                    <TextBlock>Количество вкл :</TextBlock>
                     <TextBlock Name="NumberTurnOnFan2">0</TextBlock>
                 </StackPanel>
             </StackPanel>
@@ -155,17 +155,17 @@
                     <TextBlock Name="WorkTimeFan3">0</TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>Количество вкл.:</TextBlock>
+                    <TextBlock>Количество вкл :</TextBlock>
                     <TextBlock Name="NumberTurnOnFan3">0</TextBlock>
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="4" Grid.Column="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>Время работы:</TextBlock>
+                    <TextBlock>Время работы :</TextBlock>
                     <TextBlock Name="WorkTimeFan4">0</TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>Количество вкл.:</TextBlock>
+                    <TextBlock>Количество вкл :</TextBlock>
                     <TextBlock Name="NumberTurnOnFan4">0</TextBlock>
                 </StackPanel>
             </StackPanel>
