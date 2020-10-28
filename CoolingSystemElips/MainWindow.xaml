@@ -1,0 +1,178 @@
+﻿<Window x:Class="CoolingSystemElips.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:nu="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:CoolingSystemElips"
+        mc:Ignorable="d"
+        Title="Cooling System" Height="450" Width="800" MinHeight="600" MinWidth="500" Loaded="Window_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="16"></Setter>
+                <Setter Property="Margin" Value="2"></Setter>
+            </Style>
+
+            <Style TargetType="Ellipse">
+                <Setter Property="Height" Value="100"></Setter>
+                <Setter Property="Width" Value="100"></Setter>
+                <Setter Property="Fill" Value="Blue"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" ShowGridLines="True" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <!--#region Motor Fans-->
+            
+            <StackPanel Grid.Column="0" 
+                        Grid.Row="0">
+                <TextBlock>МВ1</TextBlock>
+                <Ellipse Name="fan1"></Ellipse>
+            </StackPanel>
+            <StackPanel Grid.Column="1" 
+                        Grid.Row="0">
+                <TextBlock>МВ2</TextBlock>
+                <Ellipse Name="fan2"></Ellipse>
+            </StackPanel>
+            <StackPanel Grid.Column="0" 
+                        Grid.Row="2">
+                <TextBlock>МВ3</TextBlock>
+                <Ellipse Name="fan3"></Ellipse>
+            </StackPanel>
+            <StackPanel Grid.Column="1" 
+                       Grid.Row="2">
+                <TextBlock>МВ4</TextBlock>
+                <Ellipse Name="fan4"></Ellipse>
+            </StackPanel>
+            
+            <!--#endregion-->
+
+            <!--#region Coolant Temperature-->
+            
+            <StackPanel Grid.Row="0"  Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <TextBlock>Температура воды</TextBlock>
+                <nu:IntegerUpDown Name="tempWater" ValueChanged="tempWater_ValueChanged"></nu:IntegerUpDown>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <TextBlock>Температура масла</TextBlock>
+                <nu:IntegerUpDown Name="tempOil" ValueChanged="tempOil_ValueChanged"></nu:IntegerUpDown>
+            </StackPanel>
+            
+            <!--#endregion-->
+        
+        </Grid>
+
+        <Grid Grid.Row="1" ShowGridLines="True" Margin="10">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <!--#region Statistics-->
+            
+            <TextBlock>СТАТИСТИКА</TextBlock>
+            
+            <!--#region Test -->
+            <ComboBox Grid.Column="2" Grid.Row="1"
+                Name="selectTest"
+                      MinHeight="30"
+                      VerticalAlignment="Center" SelectionChanged="selectTest_SelectionChanged"></ComboBox>
+            <ToggleButton Grid.Column="2" Grid.Row="3"
+                          Name="startStopTest" 
+                          Checked="startStopTest_Checked" 
+                          Unchecked="startStopTest_Unchecked"
+                          >Запустить тест</ToggleButton>
+            <ProgressBar Grid.Column="2" Grid.Row="2"
+                    Name="statusTest"
+                         MinHeight="20"
+                         VerticalAlignment="Center"></ProgressBar>
+            <!--#endregion-->
+            
+            <!--#region Data Output-->
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                       >МВ1</TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="0"
+                       >МВ2</TextBlock>
+            <TextBlock Grid.Row="3" Grid.Column="0"
+                       >МВ3</TextBlock>
+            <TextBlock Grid.Row="4" Grid.Column="0"
+                       >МВ4</TextBlock>
+
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Время работы:</TextBlock>
+                    <TextBlock Name="WorkTimeFan1">0</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Количество вкл.:</TextBlock>
+                    <TextBlock Name="NumberTurnOnFan1">0</TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Время работы:</TextBlock>
+                    <TextBlock Name="WorkTimeFan2">0</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Количество вкл.:</TextBlock>
+                    <TextBlock Name="NumberTurnOnFan2">0</TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Время работы :</TextBlock>
+                    <TextBlock Name="WorkTimeFan3">0</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Количество вкл.:</TextBlock>
+                    <TextBlock Name="NumberTurnOnFan3">0</TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Время работы:</TextBlock>
+                    <TextBlock Name="WorkTimeFan4">0</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Количество вкл.:</TextBlock>
+                    <TextBlock Name="NumberTurnOnFan4">0</TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <!--#endregion-->
+            
+            <!--#endregion-->
+        
+        </Grid>
+    </Grid>
+</Window>
