@@ -44,6 +44,26 @@ namespace CoolingSystemElips
         private bool statusOff;
 
         /// <summary>
+        /// Температура включение по маслу
+        /// </summary>
+        private sbyte tempOilOn;
+
+        /// <summary>
+        /// Температура отключения по маслу
+        /// </summary>
+        private sbyte tempOilOff;
+
+        /// <summary>
+        /// Температура включения по воде
+        /// </summary>
+        private sbyte tempWaterOn;
+
+        /// <summary>
+        /// Температура отключения по воде
+        /// </summary>
+        private sbyte tempWaterOff;
+
+        /// <summary>
         /// Время работы
         /// </summary>
         private UInt64 workTime;
@@ -126,6 +146,40 @@ namespace CoolingSystemElips
             private set 
             {
                 statusOff = value;
+            }
+        }
+
+        /// <summary>
+        /// Температура включение по маслу
+        /// </summary>
+        public sbyte TempOilOn
+        {
+            get 
+            { 
+                return tempOilOn; 
+            }
+            set 
+            {
+                if (value > -80 && value < 120)
+                    tempOilOn = value;
+                else tempOilOn = 0;        
+            }
+        }
+
+        /// <summary>
+        /// Температура отключения по маслу
+        /// </summary>
+        public sbyte TempOilOff
+        {
+            get
+            {
+                return tempOilOff;
+            }
+            set
+            {
+                if (value > -80 && value < 120)
+                    tempOilOff = value;
+                else tempOilOff = 0;
             }
         }
 
