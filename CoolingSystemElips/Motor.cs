@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace CoolingSystemElips
 {
@@ -92,6 +93,9 @@ namespace CoolingSystemElips
 
         #region Свойства
 
+        /// <summary>
+        /// Порядковый номер
+        /// </summary>
         public byte Number
         {
             get
@@ -100,12 +104,14 @@ namespace CoolingSystemElips
             }
             set
             {
-                number = value;
+                if (value > 0)
+                    number = value;
+                else number = 0;
             }
         }
 
         /// <summary>
-        /// Команда : вкл. - 1 / откл. - 0
+        /// Команда : вкл. - 1 / откл. - 0 / error - 2
         /// </summary>
         public byte Status
         {
@@ -115,7 +121,9 @@ namespace CoolingSystemElips
             }
             private set
             {
-               status = value;
+                if (value == 0 || value == 1)
+                    status = value;
+                else status = 2;    // error
             }
         }
        
@@ -183,6 +191,43 @@ namespace CoolingSystemElips
             }
         }
 
+        /// <summary>
+        /// Температура включение по воде
+        /// </summary>
+        public sbyte TempWaterOn
+        {
+            get
+            {
+                return tempWaterOn;
+            }
+            set
+            {
+                if (value > -80 && value < 120)
+                    tempWaterOn = value;
+                else tempWaterOn = 0;
+            }
+        }
+
+        /// <summary>
+        /// Температура отключения по воде
+        /// </summary>
+        public sbyte TempWaterOff
+        {
+            get
+            {
+                return tempWaterOff;
+            }
+            set
+            {
+                if (value > -80 && value < 120)
+                    tempWaterOff = value;
+                else tempWaterOff = 0;
+            }
+        }
+        
+        /// <summary>
+        /// Время работы (в секундах)
+        /// </summary>
         public UInt64 WorkTime
         {
             get
@@ -191,9 +236,15 @@ namespace CoolingSystemElips
             }
             private set
             {
-                workTime = value;
+                if (value >= UInt64.MinValue && value <= UInt64.MaxValue)
+                    workTime = value;
+                else workTime = 0;
             }
         }
+
+        /// <summary>
+        /// Количество включений
+        /// </summary>
         public UInt32 NumberTurnOn
         {
             get
@@ -202,7 +253,9 @@ namespace CoolingSystemElips
             }
             private set
             {
-                numberTurnOn = value;
+                if (value >= UInt32.MinValue && value <= UInt32.MaxValue)
+                    numberTurnOn = value;
+                else numberTurnOn = 0;
             }
         }
 
@@ -211,7 +264,16 @@ namespace CoolingSystemElips
         #region Конструкторы
 
         public Motor() : this (0) { }
-        public Motor(byte num)
+        public Motor(byte num) : this (num, 0, 0, 0, 0) { }
+        /// <summary>
+        /// Создать мотор с номером и температурными уставками
+        /// </summary>
+        /// <param name="num">порядковый номер</param>
+        /// <param name="toon">Температура включение по маслу</param>
+        /// <param name="tooff">Температура отключения по маслу</param>
+        /// <param name="twon">Температура включение по воде</param>
+        /// <param name="twoff">Температура отключения по воде</param>
+        public Motor(byte num, sbyte toon, sbyte tooff, sbyte twon, sbyte twoff) 
         {
             Number = num;
             Status = off;
@@ -219,6 +281,10 @@ namespace CoolingSystemElips
             StatusOff = true;
             WorkTime = 0;
             NumberTurnOn = 0;
+            TempOilOn = toon;
+            TempOilOff = tooff;
+            TempWaterOn = twon;
+            TempWaterOff = twoff;
 
             startTime = DateTime.Now;
             stopTime = DateTime.Now;

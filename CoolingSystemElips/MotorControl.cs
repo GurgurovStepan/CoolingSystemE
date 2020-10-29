@@ -11,8 +11,8 @@ namespace CoolingSystemElips
 
         #region Поля
 
-        private int? tempOilValue;
-        private int? tempWaterValue;
+        //private int? tempOilValue;
+        //private int? tempWaterValue;
 
         #endregion
 
@@ -25,8 +25,8 @@ namespace CoolingSystemElips
         /// <param name="tw">Температура воды</param>
         public void tempControl(int? to, int? tw, Motor mt)
         {
-            bool allowTurnOn = false;
-            bool allowTurnOff = false;
+           // bool allowTurnOn = false;
+           // bool allowTurnOff = false;
 
             
 
