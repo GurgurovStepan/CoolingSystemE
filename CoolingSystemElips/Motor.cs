@@ -20,6 +20,16 @@ namespace CoolingSystemElips
         /// </summary>
         private readonly byte off = 0;
 
+        /// <summary>
+        /// Минимальная температура охладителя  
+        /// </summary>
+        private readonly sbyte minTemp = -87;
+
+        /// <summary>
+        /// Максимальная температура охладителя  
+        /// </summary>
+        private readonly sbyte maxTemp = 127;
+
         #endregion
 
         #region Поля
@@ -47,22 +57,22 @@ namespace CoolingSystemElips
         /// <summary>
         /// Температура включение по маслу
         /// </summary>
-        private sbyte tempOilOn;
+        private sbyte? tempOilOn;
 
         /// <summary>
         /// Температура отключения по маслу
         /// </summary>
-        private sbyte tempOilOff;
+        private sbyte? tempOilOff;
 
         /// <summary>
         /// Температура включения по воде
         /// </summary>
-        private sbyte tempWaterOn;
+        private sbyte? tempWaterOn;
 
         /// <summary>
         /// Температура отключения по воде
         /// </summary>
-        private sbyte tempWaterOff;
+        private sbyte? tempWaterOff;
 
         /// <summary>
         /// Время работы
@@ -160,7 +170,7 @@ namespace CoolingSystemElips
         /// <summary>
         /// Температура включение по маслу
         /// </summary>
-        public sbyte TempOilOn
+        public sbyte? TempOilOn
         {
             get 
             { 
@@ -168,16 +178,16 @@ namespace CoolingSystemElips
             }
             set 
             {
-                if (value > -80 && value < 120)
+                if (value > minTemp && value < maxTemp)
                     tempOilOn = value;
-                else tempOilOn = 0;        
+                else tempOilOn = maxTemp;        
             }
         }
 
         /// <summary>
         /// Температура отключения по маслу
         /// </summary>
-        public sbyte TempOilOff
+        public sbyte? TempOilOff
         {
             get
             {
@@ -185,16 +195,16 @@ namespace CoolingSystemElips
             }
             set
             {
-                if (value > -80 && value < 120)
+                if (value > minTemp && value < maxTemp)
                     tempOilOff = value;
-                else tempOilOff = 0;
+                else tempOilOff = maxTemp;
             }
         }
 
         /// <summary>
         /// Температура включение по воде
         /// </summary>
-        public sbyte TempWaterOn
+        public sbyte? TempWaterOn
         {
             get
             {
@@ -202,16 +212,16 @@ namespace CoolingSystemElips
             }
             set
             {
-                if (value > -80 && value < 120)
+                if (value > minTemp && value < maxTemp)
                     tempWaterOn = value;
-                else tempWaterOn = 0;
+                else tempWaterOn = maxTemp;
             }
         }
 
         /// <summary>
         /// Температура отключения по воде
         /// </summary>
-        public sbyte TempWaterOff
+        public sbyte? TempWaterOff
         {
             get
             {
@@ -219,9 +229,9 @@ namespace CoolingSystemElips
             }
             set
             {
-                if (value > -80 && value < 120)
+                if (value > minTemp && value < maxTemp)
                     tempWaterOff = value;
-                else tempWaterOff = 0;
+                else tempWaterOff = maxTemp;
             }
         }
         
@@ -264,7 +274,7 @@ namespace CoolingSystemElips
         #region Конструкторы
 
         public Motor() : this (0) { }
-        public Motor(byte num) : this (num, 0, 0, 0, 0) { }
+        public Motor(byte num) : this (num, null, null, null, null) { }
         /// <summary>
         /// Создать мотор с номером и температурными уставками
         /// </summary>
@@ -273,14 +283,14 @@ namespace CoolingSystemElips
         /// <param name="tooff">Температура отключения по маслу</param>
         /// <param name="twon">Температура включение по воде</param>
         /// <param name="twoff">Температура отключения по воде</param>
-        public Motor(byte num, sbyte toon, sbyte tooff, sbyte twon, sbyte twoff) 
+        public Motor(byte num, sbyte? toon, sbyte? tooff, sbyte? twon, sbyte? twoff) 
         {
             Number = num;
             Status = off;
             StatusOn = false;
             StatusOff = true;
             WorkTime = 0;
-            NumberTurnOn = 0;
+            NumberTurnOn = 0; 
             TempOilOn = toon;
             TempOilOff = tooff;
             TempWaterOn = twon;

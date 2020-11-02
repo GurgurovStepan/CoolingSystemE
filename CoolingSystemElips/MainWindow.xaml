@@ -71,13 +71,19 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
                 <TextBlock>Температура воды</TextBlock>
-                <nu:IntegerUpDown Name="tempWater" ValueChanged="tempWater_ValueChanged"></nu:IntegerUpDown>
+                <nu:IntegerUpDown Name="tempWater" 
+                                  Minimum="-80"
+                                  Maximum="120"
+                                  ValueChanged="tempWater_ValueChanged"></nu:IntegerUpDown>
             </StackPanel>
             <StackPanel Grid.Row="2" Grid.Column="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
                 <TextBlock>Температура масла</TextBlock>
-                <nu:IntegerUpDown Name="tempOil" ValueChanged="tempOil_ValueChanged"></nu:IntegerUpDown>
+                <nu:IntegerUpDown Name="tempOil" 
+                                  Minimum="-80"
+                                  Maximum="120"
+                                  ValueChanged="tempOil_ValueChanged"></nu:IntegerUpDown>
             </StackPanel>
             
             <!--#endregion-->

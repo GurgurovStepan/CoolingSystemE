@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace CoolingSystemElips
 {
-    class MotorControl : Motor
+    class MotorControl
     {
 
         #region Поля
-
-        //private int? tempOilValue;
-        //private int? tempWaterValue;
-
         #endregion
 
         #region Методы
@@ -25,11 +21,22 @@ namespace CoolingSystemElips
         /// <param name="tw">Температура воды</param>
         public void tempControl(int? to, int? tw, Motor mt)
         {
-           // bool allowTurnOn = false;
-           // bool allowTurnOff = false;
-
-            
-
+            if (mt != null && to != null && tw != null)
+            {
+                // Температура масла или воды превышена
+                if (to > mt.TempOilOn || tw > mt.TempWaterOn)
+                {
+                    mt.TurnOn();
+                }
+                else
+                {
+                    // Температура масла и воды в норме
+                    if (to < mt.TempOilOff && tw < mt.TempWaterOff)
+                    {
+                        mt.TurnOff();
+                    }
+                }
+            }
         }
 
         #endregion
