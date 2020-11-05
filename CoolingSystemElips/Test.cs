@@ -31,6 +31,11 @@ namespace CoolingSystemElips
         /// </summary>
         private bool completed;
 
+        private int currentTempOil;
+        private int currentTempWater;
+
+        private sbyte timeInterval;
+
         #endregion
 
         #region Свойства
@@ -69,8 +74,8 @@ namespace CoolingSystemElips
                 lvl = value;
             }
         }
-    
-        public bool Ready 
+
+        public bool Ready
         {
             get 
             {

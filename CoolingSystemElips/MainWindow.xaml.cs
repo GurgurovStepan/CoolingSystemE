@@ -24,40 +24,20 @@ namespace CoolingSystemElips
         {
             InitializeComponent();
         }
-      
+
         Motor[] motor = new Motor[5];
         MotorControl motorControl = new MotorControl();
-        
+        Test mainTest = new Test();
+
         private void tempOil_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            var value = (((Xceed.Wpf.Toolkit.CommonNumericUpDown<int>)(sender)).Value);
-            
-            if (value != null)
-            {             
-                for (int i = 1; i < motor.Length; i++)
-                {
-                    motorControl.tempControl(tempOil.Value, tempWater.Value, motor[i]);
-                }
 
-                DrawMotors();
-                DrawStatistics();
-            }
+            TurnOnMotors();
         }
 
         private void tempWater_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            var value = (((Xceed.Wpf.Toolkit.CommonNumericUpDown<int>)(sender)).Value);
-
-            if (value != null) 
-            {
-                for (int i = 1; i < motor.Length; i++)
-                {
-                    motorControl.tempControl(tempOil.Value, tempWater.Value, motor[i]);
-                }
-
-                DrawMotors();
-                DrawStatistics();
-            }
+            TurnOnMotors();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -97,12 +77,15 @@ namespace CoolingSystemElips
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Выбор теста
+        /// </summary>
         private void selectTest_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (selectTest.SelectedItem != null)
             {
-                // MainTest.LvL = byte.Parse(selectTest.SelectedItem.ToString());
+                 mainTest.LvL = byte.Parse(selectTest.SelectedItem.ToString());
             }
         }
 
@@ -119,20 +102,20 @@ namespace CoolingSystemElips
         /// <summary>
         /// Отобразить состояние моторов (вкл - красный, отключен - синий)
         /// </summary>
-        private void DrawMotors() 
+        private void DrawMotors()
         {
             var red = Brushes.Red;
             var blue = Brushes.Blue;
 
-            if (motor[1].StatusOn) fan1.Fill = red;          
+            if (motor[1].StatusOn) fan1.Fill = red;
             if (motor[1].StatusOff) fan1.Fill = blue;
 
             if (motor[2].StatusOn) fan2.Fill = red;
-            if (motor[2].StatusOff) fan2.Fill = blue;       
+            if (motor[2].StatusOff) fan2.Fill = blue;
 
             if (motor[3].StatusOn) fan3.Fill = red;
             if (motor[3].StatusOff) fan3.Fill = blue;
-           
+
 
             if (motor[4].StatusOn) fan4.Fill = red;
             if (motor[4].StatusOff) fan4.Fill = blue;
@@ -141,7 +124,7 @@ namespace CoolingSystemElips
         /// <summary>
         /// Отобразить статистику
         /// </summary>
-        private void DrawStatistics() 
+        private void DrawStatistics()
         {
             WorkTimeFan1.Text = motor[1].WorkTime.ToString();
             NumberTurnOnFan1.Text = motor[1].NumberTurnOn.ToString();
@@ -154,6 +137,24 @@ namespace CoolingSystemElips
 
             WorkTimeFan4.Text = motor[4].WorkTime.ToString();
             NumberTurnOnFan4.Text = motor[4].NumberTurnOn.ToString();
+        }
+
+        private void TurnOnMotors()
+        {
+
+            var tempOilValue = tempOil.Value;
+            var tempWaterValue = tempWater.Value;
+
+            if (tempOilValue != null || tempWaterValue != null)
+            {
+                for (int i = 1; i < motor.Length; i++)
+                {
+                    motorControl.tempControl(tempOil.Value, tempWater.Value, motor[i]);
+                }
+
+                DrawMotors();
+                DrawStatistics();
+            }
         }
     }
 }
