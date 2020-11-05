@@ -99,6 +99,8 @@ namespace CoolingSystemElips
             }
         }
 
+
+
         #endregion
 
         #region Конструкторы
@@ -110,6 +112,9 @@ namespace CoolingSystemElips
             LvL = 0;
             Ready = false;
             Completed = false;
+
+            TestControl testControl = new TestControl();
+            testControl.InitTemps();
         }
 
         #endregion

@@ -31,13 +31,18 @@ namespace CoolingSystemElips
 
         private void tempOil_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
-            TurnOnMotors();
+            if (tempOil.Value != null && tempWater.Value != null) 
+            {
+                TurnOnMotors((int)tempOil.Value,(int)tempWater.Value);
+            }
         }
 
         private void tempWater_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            TurnOnMotors();
+            if (tempOil.Value != null && tempWater.Value != null)
+            {
+                TurnOnMotors((int)tempOil.Value, (int)tempWater.Value);
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -77,7 +82,7 @@ namespace CoolingSystemElips
                 }
             }
         }
-        
+
         /// <summary>
         /// Выбор теста
         /// </summary>
@@ -85,18 +90,22 @@ namespace CoolingSystemElips
         {
             if (selectTest.SelectedItem != null)
             {
-                 mainTest.LvL = byte.Parse(selectTest.SelectedItem.ToString());
+                mainTest.LvL = byte.Parse(selectTest.SelectedItem.ToString());
             }
         }
 
         private void startStopTest_Checked(object sender, RoutedEventArgs e)
         {
             startStopTest.Content = "Завершить тест";
+            tempOil.IsEnabled = false;
+            tempWater.IsEnabled = false;
         }
 
         private void startStopTest_Unchecked(object sender, RoutedEventArgs e)
         {
             startStopTest.Content = "Запустить тест";
+            tempOil.IsEnabled = true;
+            tempWater.IsEnabled = true;
         }
 
         /// <summary>
@@ -139,22 +148,15 @@ namespace CoolingSystemElips
             NumberTurnOnFan4.Text = motor[4].NumberTurnOn.ToString();
         }
 
-        private void TurnOnMotors()
+        private void TurnOnMotors(int tempOilValue, int tempWaterValue)
         {
-
-            var tempOilValue = tempOil.Value;
-            var tempWaterValue = tempWater.Value;
-
-            if (tempOilValue != null || tempWaterValue != null)
+            for (int i = 1; i < motor.Length; i++)
             {
-                for (int i = 1; i < motor.Length; i++)
-                {
-                    motorControl.tempControl(tempOil.Value, tempWater.Value, motor[i]);
-                }
-
-                DrawMotors();
-                DrawStatistics();
+                motorControl.tempControl(tempOilValue, tempWaterValue, motor[i]);
             }
+
+            DrawMotors();
+            DrawStatistics();
         }
     }
 }
