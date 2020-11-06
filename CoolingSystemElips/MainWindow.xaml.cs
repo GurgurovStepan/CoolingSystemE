@@ -23,20 +23,28 @@ namespace CoolingSystemElips
         public MainWindow()
         {
             InitializeComponent();
+            timer.Tick += new EventHandler(timerTick);
         }
 
         Motor[] motor = new Motor[5];
         MotorControl motorControl = new MotorControl();
-        Test mainTest = new Test();
+        System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
+        Test mainTest;
 
+        /// <summary>
+        /// Изменить значение температуры масла
+        /// </summary>
         private void tempOil_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (tempOil.Value != null && tempWater.Value != null) 
+            if (tempOil.Value != null && tempWater.Value != null)
             {
-                TurnOnMotors((int)tempOil.Value,(int)tempWater.Value);
+                TurnOnMotors((int)tempOil.Value, (int)tempWater.Value);
             }
         }
 
+        /// <summary>
+        /// Изменить значение температуры воды
+        /// </summary>
         private void tempWater_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (tempOil.Value != null && tempWater.Value != null)
@@ -45,6 +53,9 @@ namespace CoolingSystemElips
             }
         }
 
+        /// <summary>
+        /// Загрузка объектов
+        /// </summary>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -55,19 +66,6 @@ namespace CoolingSystemElips
                 motor[2] = new Motor(2, 79, 75, null, null);    // Мотор 2
                 motor[3] = new Motor(3, 79, 75, 83, 75);        // Мотор 3
                 motor[4] = new Motor(4, null, null, 79, 76);    // Мотор 4
-
-                // Добавить коллекцию в ComboBox  
-                string[] testNumber = new string[4] { "1", "2", "3", "4" };
-                selectTest.Items.Clear();
-
-                foreach (string tn in testNumber)
-                {
-                    selectTest.Items.Add(tn);
-                }
-
-                // Инициализируем NumericUpDown.Value
-                tempOil.Value = 0;
-                tempWater.Value = 0;
             }
             catch (IndexOutOfRangeException ex)
             {
@@ -81,31 +79,44 @@ namespace CoolingSystemElips
                     this.Close();
                 }
             }
+
+            // Инициализируем NumericUpDown.Value (иначе Exception)
+            tempOil.Value = 0;
+            tempWater.Value = 0;
+            selectTest.Value = 1;
         }
 
         /// <summary>
-        /// Выбор теста
+        /// Выбрать интенсивность теста
         /// </summary>
-        private void selectTest_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void selectTest_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (selectTest.SelectedItem != null)
+            if (selectTest.Value != null)
             {
-                mainTest.LvL = byte.Parse(selectTest.SelectedItem.ToString());
+                mainTest = new Test(sbyte.Parse(selectTest.Value.ToString()));
+                timer.Interval = new TimeSpan(0, 0, mainTest.TestRate);
             }
         }
 
+        /// <summary>
+        /// Запустить тест
+        /// </summary>
         private void startStopTest_Checked(object sender, RoutedEventArgs e)
         {
             startStopTest.Content = "Завершить тест";
             tempOil.IsEnabled = false;
             tempWater.IsEnabled = false;
+            timer.Start();
         }
-
+        /// <summary>
+        /// Прекратить тест (остановить?)
+        /// </summary>
         private void startStopTest_Unchecked(object sender, RoutedEventArgs e)
         {
             startStopTest.Content = "Запустить тест";
             tempOil.IsEnabled = true;
             tempWater.IsEnabled = true;
+            timer.Stop();
         }
 
         /// <summary>
@@ -148,6 +159,11 @@ namespace CoolingSystemElips
             NumberTurnOnFan4.Text = motor[4].NumberTurnOn.ToString();
         }
 
+        /// <summary>
+        /// Управление моторами (вкл./откл.), отрисовка статистики и состояния мотор-вентиляторов
+        /// </summary>
+        /// <param name="tempOilValue">температура масла</param>
+        /// <param name="tempWaterValue">температура воды</param>
         private void TurnOnMotors(int tempOilValue, int tempWaterValue)
         {
             for (int i = 1; i < motor.Length; i++)
@@ -157,6 +173,50 @@ namespace CoolingSystemElips
 
             DrawMotors();
             DrawStatistics();
+        }
+
+        /// <summary>
+        /// Автоматическое управление моторами (вкл./откл.), отрисовка статистики и состояния мотор-вентиляторов
+        /// </summary>
+        private void timerTick(object sender, EventArgs e)
+        {
+            if (mainTest.Completed)
+            {
+                timer.Stop();
+                startStopTest.IsChecked = false;
+                testСompleted();
+            }
+            else
+            {
+                mainTest.GetCurTemps();
+                tempOil.Value = mainTest.CurTempOil;
+                tempWater.Value = mainTest.CurTempWater;
+            }
+        }
+
+        private void testСompleted() 
+        {
+            string mes = "Тест завершен!\n" +
+                "Сбросить статистику?";
+            string cap = "Тест";
+            System.Windows.Forms.MessageBoxButtons but = System.Windows.Forms.MessageBoxButtons.YesNo;
+
+            System.Windows.Forms.DialogResult result = System.Windows.Forms.MessageBox.Show(mes, cap, but);
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                ResetStatisticsMotor();
+                DrawMotors();
+                DrawStatistics();
+
+            }
+        }
+    
+        private void ResetStatisticsMotor()
+        {
+            foreach (var m in motor)
+            {
+                m.ResStatsMotor();
+            }
         }
     }
 }

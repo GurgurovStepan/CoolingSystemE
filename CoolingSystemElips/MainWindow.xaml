@@ -39,9 +39,9 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            
+
             <!--#region Motor Fans-->
-            
+
             <StackPanel Grid.Column="0" 
                         Grid.Row="0">
                 <TextBlock>МВ1</TextBlock>
@@ -62,11 +62,11 @@
                 <TextBlock>МВ4</TextBlock>
                 <Ellipse Name="fan4"></Ellipse>
             </StackPanel>
-            
+
             <!--#endregion-->
 
             <!--#region Coolant Temperature-->
-            
+
             <StackPanel Grid.Row="0"  Grid.Column="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
@@ -85,9 +85,9 @@
                                   Maximum="120"
                                   ValueChanged="tempOil_ValueChanged"></nu:IntegerUpDown>
             </StackPanel>
-            
+
             <!--#endregion-->
-        
+
         </Grid>
 
         <Grid Grid.Row="1" ShowGridLines="True" Margin="10">
@@ -106,14 +106,18 @@
             </Grid.ColumnDefinitions>
 
             <!--#region Statistics-->
-            
+
             <TextBlock>СТАТИСТИКА</TextBlock>
-            
+
             <!--#region Test -->
-            <ComboBox Grid.Column="2" Grid.Row="1"
-                Name="selectTest"
-                      MinHeight="30"
-                      VerticalAlignment="Center" SelectionChanged="selectTest_SelectionChanged"></ComboBox>
+            <nu:IntegerUpDown Grid.Column="2" 
+                              Grid.Row="1"
+                              Name="selectTest"
+                              Minimum="1"
+                              Maximum="100"
+                              MinHeight="30"
+                              VerticalAlignment="Center" 
+                              ValueChanged="selectTest_ValueChanged"></nu:IntegerUpDown>
             <ToggleButton Grid.Column="2" Grid.Row="3"
                           Name="startStopTest" 
                           Checked="startStopTest_Checked" 
@@ -124,7 +128,7 @@
                          MinHeight="20"
                          VerticalAlignment="Center"></ProgressBar>
             <!--#endregion-->
-            
+
             <!--#region Data Output-->
             <TextBlock Grid.Row="1" Grid.Column="0"
                        >МВ1</TextBlock>
@@ -176,9 +180,9 @@
                 </StackPanel>
             </StackPanel>
             <!--#endregion-->
-            
+
             <!--#endregion-->
-        
+
         </Grid>
     </Grid>
 </Window>

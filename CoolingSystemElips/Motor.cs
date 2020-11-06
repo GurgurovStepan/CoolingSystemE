@@ -337,6 +337,19 @@ namespace CoolingSystemElips
             }
         }
 
+        public void ResStatsMotor() 
+        {
+            Status = off;
+            StatusOn = false;
+            StatusOff = true;
+            WorkTime = 0;
+            NumberTurnOn = 0;
+
+            startTime = DateTime.Now;
+            stopTime = DateTime.Now;
+            workInterval = TimeSpan.Zero;
+        }
+
         #endregion
 
         #region private

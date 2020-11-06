@@ -9,21 +9,45 @@ namespace CoolingSystemElips
 {
     class TestControl
     {
-        /// <summary>
-        /// температур масла
-        /// </summary>
-        List<sbyte> tempOil = new List<sbyte>() { 73, 73, 72, 72, 72, 71, 71, 70, 70, 69, 69, 68, 68, 68, 68 };
-        /// <summary>
-        /// температур воды
-        /// </summary>
-        List<sbyte> tempWater = new List<sbyte> { 82, 82, 81, 81, 81, 80, 79, 78, 77, 76, 75, 74, 73, 73, 73 };
+        #region Поля
 
         /// <summary>
-        /// пара температур масла - воды
+        /// температура масла
         /// </summary>
-        List<TestData> temps = new List<TestData> { };
+        private List<sbyte> tempOil = new List<sbyte>() { 76, 75, 74, 73, 72, 71, 70, 69, 68, 67, 66, 65, 64, 63, 62 };
+        /// <summary>
+        /// температура воды
+        /// </summary>
+        private List<sbyte> tempWater = new List<sbyte> { 86, 85, 84, 83, 82, 81, 80, 79, 78, 77, 76, 75, 74, 73, 72 };
+        
+        /// <summary>
+        /// пара значений температур масла - вода
+        /// </summary>
+        private List<TestData> temps = new List<TestData> { };
 
-        public void InitTemps() 
+        /// <summary>
+        /// указатель на прочитанный элемент списка 
+        /// </summary>
+        private int counter;
+
+        #endregion
+
+        #region Конструкторы
+
+        public TestControl()
+        {
+            InitTemps();
+            counter = 0;
+        }
+
+        #endregion
+
+        #region Методы
+
+        /// <summary>
+        /// Заполнить коллекцию значениями температур масла и воды
+        /// </summary>
+        private void InitTemps()
         {
             for (int i = 0; i < tempOil.Count; i++)
             {
@@ -31,17 +55,38 @@ namespace CoolingSystemElips
             }
         }
 
+        /// <summary>
+        /// Установить значения температур согласно значению указателя
+        /// </summary>
+        /// <param name="to">температур масла</param>
+        /// <param name="tw">температур воды</param>
+        /// <returns>исчерпано число элементов спика</returns>
+        public bool GetTemps(ref sbyte to, ref sbyte tw)
+        {
+            if (counter < temps.Count()) 
+            {
+                to = temps[counter].TempOil;
+                tw = temps[counter].TempWater;
+                counter++;
+                return false;
+            }
+            else 
+            {
+                return true;
+            }
+        }
+
+        #endregion
     }
 
-    class TestData 
+    class TestData
     {
-        private sbyte tempOil;
-        private sbyte tempWater;
-
-        public TestData(sbyte to, sbyte tw) 
+        public sbyte TempWater { get; set; }
+        public sbyte TempOil { get; set; }
+        public TestData(sbyte to, sbyte tw)
         {
-            tempOil = to;
-            tempWater = tw;
+            TempOil = to;
+            TempWater = tw;
         }
     }
 

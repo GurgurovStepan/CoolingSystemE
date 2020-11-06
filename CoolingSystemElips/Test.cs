@@ -8,113 +8,153 @@ namespace CoolingSystemElips
 {
     class Test
     {
+        private TestControl testControl;
+
         #region Поля
 
         /// <summary>
         /// запустить тест
         /// </summary>
         private bool start;
+        
         /// <summary>
         /// завершить тест
         /// </summary>
         private bool stop;
+        
         /// <summary>
-        /// номер теста
-        /// </summary>
-        private byte lvl;
-        /// <summary>
-        /// тест  готов к выполнению
+        /// тест готов к выполнению
         /// </summary>
         private bool ready;
+        
         /// <summary>
-        /// тест завершен
+        /// тест выполнен
         /// </summary>
         private bool completed;
-
-        private int currentTempOil;
-        private int currentTempWater;
-
-        private sbyte timeInterval;
+        
+        /// <summary>
+        /// интенсивность выполнения теста
+        /// </summary>
+        private sbyte testRate;
 
         #endregion
 
         #region Свойства
-        public bool Start 
+        public bool Start
         {
-            get 
+            get
             {
                 return start;
             }
-            set 
+            set
             {
                 start = value;
             }
         }
 
-        public bool Stop 
+        public bool Stop
         {
-            get 
+            get
             {
                 return stop;
             }
-            set 
+            set
             {
                 stop = value;
             }
         }
-    
-        public byte LvL 
+        
+        /// <summary>
+        /// Интенсивность выполнения теста
+        /// </summary>
+        public sbyte TestRate
         {
-            get 
+            get
             {
-                return lvl;
+                return testRate;
             }
-            set 
+            private set
             {
-                lvl = value;
+                testRate = value;
             }
         }
 
+        /// <summary>
+        /// Тест готов к выполнению
+        /// </summary>
         public bool Ready
         {
-            get 
+            get
             {
                 return ready;
             }
-            private set 
+            private set
             {
                 ready = value;
             }
         }
-    
-        public bool Completed 
+
+        /// <summary>
+        /// Тест выполнен
+        /// </summary>
+        public bool Completed
         {
-            get 
+            get
             {
-                return completed;    
+                return completed;
             }
-            set 
+            private set
             {
                 completed = value;
             }
         }
 
+        /// <summary>
+        /// Текущее значение температуры масла
+        /// </summary>
+        public int CurTempOil { get; private set; }
 
+        /// <summary>
+        /// Текущее значение температуры воды
+        /// </summary>
+        public int CurTempWater { get; private set; }
 
         #endregion
 
         #region Конструкторы
 
-        public Test() 
+        public Test() : this(0) { }
+
+        public Test(sbyte _testRate)
         {
             Start = false;
             Stop = true;
-            LvL = 0;
+            TestRate = _testRate;
             Ready = false;
             Completed = false;
+            CurTempOil = 0;
+            CurTempWater = 0;
 
-            TestControl testControl = new TestControl();
-            testControl.InitTemps();
+            testControl = new TestControl();
+        }
+
+        #endregion
+
+        #region Методы
+
+        /// <summary>
+        /// Получить текущие значения температур масла и воды
+        /// </summary>
+        public void GetCurTemps()
+        {
+            if (!completed)
+            {
+                sbyte to = 0;
+                sbyte tw = 0;
+                completed = testControl.GetTemps(ref to, ref tw);
+                CurTempOil = to;
+                CurTempWater = tw;
+            }
         }
 
         #endregion
