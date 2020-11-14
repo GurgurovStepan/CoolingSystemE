@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+
+using ExselDate;
 
 namespace CoolingSystemElips
 {
     class TestControl
     {
+        WorkExсel exsel = new WorkExсel();
+
         #region Поля
 
         /// <summary>
         /// температура масла
         /// </summary>
-        private List<sbyte> tempOil = new List<sbyte>() { 76, 75, 74, 73, 72, 71, 70, 69, 68, 67, 66, 65, 64, 63, 62 };
+        private List<sbyte> tempOil = new List<sbyte>() { };
         /// <summary>
         /// температура воды
         /// </summary>
-        private List<sbyte> tempWater = new List<sbyte> { 86, 85, 84, 83, 82, 81, 80, 79, 78, 77, 76, 75, 74, 73, 72 };
+        private List<sbyte> tempWater = new List<sbyte> { };
         
         /// <summary>
         /// пара значений температур масла - вода
@@ -35,7 +36,8 @@ namespace CoolingSystemElips
         #region Конструкторы
 
         public TestControl()
-        {
+        {     
+            InitTempsExs();
             InitTemps();
             counter = 0;
         }
@@ -43,6 +45,20 @@ namespace CoolingSystemElips
         #endregion
 
         #region Методы
+
+        private void InitTempsExs() 
+        {
+            var excelData = exsel.ReceiveData();
+
+            if (excelData!=null)
+            {
+                for (int i = 2; i < excelData.GetUpperBound(0)+1; i++)
+                {
+                    tempOil.Add((sbyte)excelData[i, 1]);
+                    tempWater.Add((sbyte)excelData[i, 2]);
+                }
+            }
+        }
 
         /// <summary>
         /// Заполнить коллекцию значениями температур масла и воды
