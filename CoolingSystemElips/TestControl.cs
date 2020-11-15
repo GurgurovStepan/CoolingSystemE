@@ -31,6 +31,45 @@ namespace CoolingSystemElips
         /// </summary>
         private int counter;
 
+        /// <summary>
+        /// число элементов в списке
+        /// </summary>
+        private int countList;
+
+        #endregion
+
+        #region Свойства
+
+        /// <summary>
+        /// Указатель на прочитанный элемент списка 
+        /// </summary>
+        public int Counter 
+        {
+            get 
+            {
+                return counter;
+            }
+            private set 
+            {
+                counter = value;
+            }
+        }
+
+        /// <summary>
+        /// Число элементов в списке
+        /// </summary>
+        public int CountList 
+        {
+            get 
+            {
+                return countList;
+            }
+            private set 
+            {
+                countList = value;
+            }
+        }
+
         #endregion
 
         #region Конструкторы
@@ -39,7 +78,8 @@ namespace CoolingSystemElips
         {     
             InitTempsExs();
             InitTemps();
-            counter = 0;
+            Counter = 0;
+            CountList = temps.Count();
         }
 
         #endregion
@@ -79,11 +119,11 @@ namespace CoolingSystemElips
         /// <returns>исчерпано число элементов спика</returns>
         public bool GetTemps(ref sbyte to, ref sbyte tw)
         {
-            if (counter < temps.Count()) 
+            if (Counter < temps.Count()) 
             {
-                to = temps[counter].TempOil;
-                tw = temps[counter].TempWater;
-                counter++;
+                to = temps[Counter].TempOil;
+                tw = temps[Counter].TempWater;
+                Counter++;
                 return false;
             }
             else 

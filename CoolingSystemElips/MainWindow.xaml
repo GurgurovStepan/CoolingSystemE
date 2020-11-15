@@ -6,7 +6,7 @@
         xmlns:nu="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:CoolingSystemElips"
         mc:Ignorable="d"
-        Title="Cooling System" Height="800" Width="800" MinHeight="700" MinWidth="750" Loaded="Window_Loaded">
+        Title="Cooling System" Height="700" Width="750" MinHeight="700" MinWidth="750" Loaded="Window_Loaded">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -48,7 +48,7 @@
                     <Setter Property="VerticalAlignment" Value="Center"></Setter>
                 </Style>
             </Grid.Resources>
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -86,77 +86,87 @@
 
         <!--#region Right -->
 
-        <DockPanel Grid.Row="0" Grid.Column="1">
+        <Grid Grid.Row="0" Grid.Column="1">
 
-            <DockPanel.Resources>
+            <Grid.Resources>
                 <Style TargetType="StackPanel">
                     <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                     <Setter Property="Margin" Value="10"></Setter>
                 </Style>
                 <Style TargetType="ToggleButton">
                     <Setter Property="Margin" Value="10"></Setter>
                 </Style>
-            </DockPanel.Resources>
+            </Grid.Resources>
 
-            <!--#region Coolant Temperature-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.5*"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
 
-            <StackPanel DockPanel.Dock="Top">
+            <StackPanel>
 
-                <TextBlock>РУЧНОЕ УПРАВЛЕНИЕ</TextBlock>
+                <!--#region Coolant Temperature-->
 
-                <TextBlock>Температура воды</TextBlock>
+                <StackPanel>
 
-                <nu:IntegerUpDown Name="tempWater" 
+                    <TextBlock>РУЧНОЕ УПРАВЛЕНИЕ</TextBlock>
+
+                    <TextBlock>Температура воды</TextBlock>
+
+                    <nu:IntegerUpDown Name="tempWater" 
                                   Minimum="-80"
                                   Maximum="120"                               
                                   ValueChanged="tempWater_ValueChanged">
-                </nu:IntegerUpDown>
+                    </nu:IntegerUpDown>
 
-                <TextBlock>Температура масла</TextBlock>
+                    <TextBlock>Температура масла</TextBlock>
 
-                <nu:IntegerUpDown Name="tempOil" 
+                    <nu:IntegerUpDown Name="tempOil" 
                                   Minimum="-80"
                                   Maximum="120"
                                   ValueChanged="tempOil_ValueChanged">
-                </nu:IntegerUpDown>
+                    </nu:IntegerUpDown>
 
-            </StackPanel>
+                </StackPanel>
 
-            <!--#endregion-->
+                <!--#endregion-->
 
-            <!--#region Test -->
+                <!--#region Test -->
 
-            <StackPanel DockPanel.Dock="Top">
+                <StackPanel>
 
-                <TextBlock>ТЕСТ</TextBlock>
+                    <TextBlock>ТЕСТ</TextBlock>
 
-                <TextBlock>Интенсивность выполнения</TextBlock>
-                <nu:IntegerUpDown Name="selectTest"
+                    <TextBlock>Интенсивность выполнения</TextBlock>
+                    <nu:IntegerUpDown Name="selectTest"
                               Minimum="1"
                               Maximum="100"
                               MinHeight="20"
                               ValueChanged="selectTest_ValueChanged">
-                </nu:IntegerUpDown>
+                    </nu:IntegerUpDown>
 
-                <TextBlock>Прогресс выполнения</TextBlock>
-                <ProgressBar Name="statusTest"
+                    <TextBlock>Прогресс выполнения</TextBlock>
+                    <ProgressBar Name="statusTest"
                          MinHeight="15">
-                </ProgressBar>
+                    </ProgressBar>
 
-                <ToggleButton Name="startStopTest"
+                    <ToggleButton Name="startStopTest"
                           MinHeight="40"
                           Checked="startStopTest_Checked" 
                           Unchecked="startStopTest_Unchecked"
                           >Запустить тест
-                </ToggleButton>
+                    </ToggleButton>
+
+                </StackPanel>
+
+                <!--#endregion-->
 
             </StackPanel>
 
-            <!--#endregion-->
-
             <!--#region Statistics-->
 
-            <Grid>
+            <Grid Grid.Row="1">
 
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
@@ -215,8 +225,7 @@
 
             <!--#endregion-->
 
-        </DockPanel>
-
+        </Grid>
         <!--#endregion-->
 
     </Grid>

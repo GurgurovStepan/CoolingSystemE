@@ -157,6 +157,24 @@ namespace CoolingSystemElips
             }
         }
 
+        /// <summary>
+        /// Узнать число элементов в списке
+        /// </summary>
+        /// <returns>число элементов в списке</returns>
+        public int GetMaxNumberElements() 
+        {
+            return testControl.CountList; 
+        }
+
+        /// <summary>
+        /// Узнать значение указателя 
+        /// </summary>
+        /// <returns>Указатель на прочитанный элемент списка </returns>
+        public int GetCurrentCounter() 
+        {
+            return testControl.Counter;
+        }
+
         #endregion
     }
 }

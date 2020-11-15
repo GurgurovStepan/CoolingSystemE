@@ -95,6 +95,9 @@ namespace CoolingSystemElips
             {
                 mainTest = new Test(sbyte.Parse(selectTest.Value.ToString()));
                 timer.Interval = new TimeSpan(0, 0, mainTest.TestRate);
+
+                statusTest.Minimum = 0;
+                statusTest.Maximum = mainTest.GetMaxNumberElements();
             }
         }
 
@@ -185,12 +188,15 @@ namespace CoolingSystemElips
                 timer.Stop();
                 startStopTest.IsChecked = false;
                 testСompleted();
+                statusTest.Value = 0;
             }
             else
             {
                 mainTest.GetCurTemps();
                 tempOil.Value = mainTest.CurTempOil;
                 tempWater.Value = mainTest.CurTempWater;
+                
+                statusTest.Value = mainTest.GetCurrentCounter();
             }
         }
 
