@@ -53,6 +53,18 @@ namespace CoolingSystemElips
             }
         }
 
+        public static void StatusOnChanged(object sender, EventArgs e)
+        {
+            Motor motor = (Motor)sender;
+            
+            if (motor.StatusOn) 
+            {
+                motor.CalculationNumberStarts();
+            }
+
+            Console.WriteLine();
+        }
+
         /// <summary>
         /// Загрузка объектов
         /// </summary>
@@ -66,6 +78,11 @@ namespace CoolingSystemElips
                 motor[2] = new Motor(2, 79, 75, null, null);    // Мотор 2
                 motor[3] = new Motor(3, 79, 75, 83, 75);        // Мотор 3
                 motor[4] = new Motor(4, null, null, 79, 76);    // Мотор 4
+
+                for (int i = 0; i < motor.Length; i++)
+                {
+                    motor[i].StatusOnChanged += new EventHandler(StatusOnChanged);
+                }
             }
             catch (IndexOutOfRangeException ex)
             {

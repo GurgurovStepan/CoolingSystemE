@@ -9,16 +9,18 @@ namespace CoolingSystemElips
 {
     class Motor
     {
+        public event EventHandler StatusOnChanged;
+
         #region Константы
-        
+
         /// <summary>
         /// Включить - on = 1  
         /// </summary>
-        private readonly byte on = 1;
-        /// <summary>
-        /// Отключить - off = 0
-        /// </summary>
-        private readonly byte off = 0;
+        //private readonly byte on = 1;
+        ///// <summary>
+        ///// Отключить - off = 0
+        ///// </summary>
+        //private readonly byte off = 0;
 
         /// <summary>
         /// Минимальная температура охладителя  
@@ -123,19 +125,19 @@ namespace CoolingSystemElips
         /// <summary>
         /// Команда : вкл. - 1 / откл. - 0 / error - 2
         /// </summary>
-        public byte Status
-        {
-            get
-            {
-                return status;
-            }
-            private set
-            {
-                if (value == 0 || value == 1)
-                    status = value;
-                else status = 2;    // error
-            }
-        }
+        //public byte Status
+        //{
+        //    get
+        //    {
+        //        return status;
+        //    }
+        //    private set
+        //    {
+        //        if (value == 0 || value == 1)
+        //            status = value;
+        //        else status = 2;    // error
+        //    }
+        //}
        
         /// <summary>
         /// Состояние включен
@@ -149,6 +151,11 @@ namespace CoolingSystemElips
             private set 
             {
                 statusOn = value;
+
+                if (StatusOnChanged != null)
+                {
+                    StatusOnChanged(this, new EventArgs());
+                }
             }
         }
 
@@ -286,7 +293,7 @@ namespace CoolingSystemElips
         public Motor(byte num, sbyte? toon, sbyte? tooff, sbyte? twon, sbyte? twoff) 
         {
             Number = num;
-            Status = off;
+            //Status = off;
             StatusOn = false;
             StatusOff = true;
             WorkTime = 0;
@@ -314,7 +321,7 @@ namespace CoolingSystemElips
         {
             if (StatusOff)
             {
-                Status = on;
+                //Status = on;
                 StatusOn = true;
                 StatusOff = false;
                 startTime = DateTime.Now;
@@ -328,18 +335,18 @@ namespace CoolingSystemElips
         {
             if (StatusOn)
             {
-                Status = off;
+                //Status = off;
                 StatusOn = false;
                 StatusOff = true;
                 stopTime = DateTime.Now;
                 CalculationWorkTime();
-                CalculationNumberStarts();
+                //CalculationNumberStarts();
             }
         }
 
         public void ResStatsMotor() 
         {
-            Status = off;
+            //Status = off;
             StatusOn = false;
             StatusOff = true;
             WorkTime = 0;
@@ -372,7 +379,7 @@ namespace CoolingSystemElips
         /// <summary>
         /// Расчет количесвтва включений мотора
         /// </summary>
-        private void CalculationNumberStarts()
+        public void CalculationNumberStarts()
         { 
             NumberTurnOn++;
         }
