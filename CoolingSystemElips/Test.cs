@@ -13,26 +13,6 @@ namespace CoolingSystemElips
         #region Поля
 
         /// <summary>
-        /// запустить тест
-        /// </summary>
-        private bool start;
-        
-        /// <summary>
-        /// завершить тест
-        /// </summary>
-        private bool stop;
-        
-        /// <summary>
-        /// тест готов к выполнению
-        /// </summary>
-        private bool ready;
-        
-        /// <summary>
-        /// тест выполнен
-        /// </summary>
-        private bool completed;
-        
-        /// <summary>
         /// интенсивность выполнения теста
         /// </summary>
         private sbyte testRate;
@@ -40,30 +20,17 @@ namespace CoolingSystemElips
         #endregion
 
         #region Свойства
-        public bool Start
-        {
-            get
-            {
-                return start;
-            }
-            set
-            {
-                start = value;
-            }
-        }
 
-        public bool Stop
-        {
-            get
-            {
-                return stop;
-            }
-            set
-            {
-                stop = value;
-            }
-        }
-        
+        /// <summary>
+        /// запустить тест
+        /// </summary>
+        public bool Start { get; set; }
+
+        /// <summary>
+        /// завершить тест
+        /// </summary>
+        public bool Stop { get; set; }
+
         /// <summary>
         /// Интенсивность выполнения теста
         /// </summary>
@@ -73,41 +40,21 @@ namespace CoolingSystemElips
             {
                 return testRate;
             }
-            private set
+            set
             {
-                testRate = value;
+                if (value >= 0 && value <= 100) testRate = value;
             }
         }
 
         /// <summary>
         /// Тест готов к выполнению
         /// </summary>
-        public bool Ready
-        {
-            get
-            {
-                return ready;
-            }
-            private set
-            {
-                ready = value;
-            }
-        }
+        public bool Ready { get; private set; }
 
         /// <summary>
         /// Тест выполнен
         /// </summary>
-        public bool Completed
-        {
-            get
-            {
-                return completed;
-            }
-            private set
-            {
-                completed = value;
-            }
-        }
+        public bool Completed { get; private set; }
 
         /// <summary>
         /// Текущее значение температуры масла
@@ -127,15 +74,15 @@ namespace CoolingSystemElips
 
         public Test(sbyte _testRate)
         {
+            testControl = new TestControl();
+
             Start = false;
             Stop = true;
             TestRate = _testRate;
-            Ready = false;
+            Ready = TestControl.ReadComplit;
             Completed = false;
             CurTempOil = 0;
             CurTempWater = 0;
-
-            testControl = new TestControl();
         }
 
         #endregion
@@ -147,11 +94,11 @@ namespace CoolingSystemElips
         /// </summary>
         public void GetCurTemps()
         {
-            if (!completed)
+            if (!Completed)
             {
                 sbyte to = 0;
                 sbyte tw = 0;
-                completed = testControl.GetTemps(ref to, ref tw);
+                Completed = testControl.GetTemps(ref to, ref tw);
                 CurTempOil = to;
                 CurTempWater = tw;
             }
@@ -161,16 +108,16 @@ namespace CoolingSystemElips
         /// Узнать число элементов в списке
         /// </summary>
         /// <returns>число элементов в списке</returns>
-        public int GetMaxNumberElements() 
+        public int GetMaxNumberElements()
         {
-            return testControl.CountList; 
+            return testControl.CountList;
         }
 
         /// <summary>
         /// Узнать значение указателя 
         /// </summary>
         /// <returns>Указатель на прочитанный элемент списка </returns>
-        public int GetCurrentCounter() 
+        public int GetCurrentCounter()
         {
             return testControl.Counter;
         }

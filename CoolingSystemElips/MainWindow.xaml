@@ -95,7 +95,7 @@
                     <Setter Property="Margin" Value="10"></Setter>
                 </Style>
                 <Style TargetType="ToggleButton">
-                    <Setter Property="Margin" Value="10"></Setter>
+                    <Setter Property="Margin" Value="0,10,0,10"></Setter>
                 </Style>
             </Grid.Resources>
 
@@ -143,21 +143,27 @@
                               Minimum="1"
                               Maximum="100"
                               MinHeight="20"
+                              IsEnabled="False"
                               ValueChanged="selectTest_ValueChanged">
                     </nu:IntegerUpDown>
 
                     <TextBlock>Прогресс выполнения</TextBlock>
                     <ProgressBar Name="statusTest"
+                                 IsEnabled="False"
                          MinHeight="15">
                     </ProgressBar>
 
                     <ToggleButton Name="startStopTest"
-                          MinHeight="40"
+                          MinHeight="36"
+                          IsEnabled="False"
                           Checked="startStopTest_Checked" 
                           Unchecked="startStopTest_Unchecked"
-                          >Запустить тест
+                          >Выполнить тест
                     </ToggleButton>
-
+                    <Button Name = "prepareTest"
+                        MinHeight="36" Click="prepareTest_Click"
+                        >Подготовить тест
+                    </Button>
                 </StackPanel>
 
                 <!--#endregion-->

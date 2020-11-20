@@ -8,33 +8,25 @@ namespace CoolingSystemElips
 {
     class TestControl
     {
-        WorkExсel exsel = new WorkExсel();
+        private WorkExсel exsel = new WorkExсel();
+
+        private struct TestData
+        {
+            public sbyte TempWater { get; set; }
+            public sbyte TempOil { get; set; }
+            public TestData(sbyte to, sbyte tw)
+            {
+                TempOil = to;
+                TempWater = tw;
+            }
+        }
 
         #region Поля
 
         /// <summary>
-        /// температура масла
-        /// </summary>
-        private List<sbyte> tempOil = new List<sbyte>() { };
-        /// <summary>
-        /// температура воды
-        /// </summary>
-        private List<sbyte> tempWater = new List<sbyte> { };
-        
-        /// <summary>
         /// пара значений температур масла - вода
         /// </summary>
         private List<TestData> temps = new List<TestData> { };
-
-        /// <summary>
-        /// указатель на прочитанный элемент списка 
-        /// </summary>
-        private int counter;
-
-        /// <summary>
-        /// число элементов в списке
-        /// </summary>
-        private int countList;
 
         #endregion
 
@@ -43,72 +35,59 @@ namespace CoolingSystemElips
         /// <summary>
         /// Указатель на прочитанный элемент списка 
         /// </summary>
-        public int Counter 
-        {
-            get 
-            {
-                return counter;
-            }
-            private set 
-            {
-                counter = value;
-            }
-        }
+        public int Counter { get; private set; }
 
         /// <summary>
         /// Число элементов в списке
         /// </summary>
-        public int CountList 
-        {
-            get 
-            {
-                return countList;
-            }
-            private set 
-            {
-                countList = value;
-            }
-        }
+        public int CountList { get; private set; }
+
+        /// <summary>
+        /// Данные загружены и готовы к использованию
+        /// </summary>
+        public static bool ReadComplit { get; private set; }
 
         #endregion
 
         #region Конструкторы
 
         public TestControl()
-        {     
-            InitTempsExs();
-            InitTemps();
+        {
+            // прочитать файл один раз
+            if (!ReadComplit)
+            {
+                ReadComplit = InitTempsExs();
+            }
+
+            CountList = temps.Count;
             Counter = 0;
-            CountList = temps.Count();
         }
 
         #endregion
 
         #region Методы
 
-        private void InitTempsExs() 
-        {
-            var excelData = exsel.ReceiveData();
-
-            if (excelData!=null)
-            {
-                for (int i = 2; i < excelData.GetUpperBound(0)+1; i++)
-                {
-                    tempOil.Add((sbyte)excelData[i, 1]);
-                    tempWater.Add((sbyte)excelData[i, 2]);
-                }
-            }
-        }
-
         /// <summary>
-        /// Заполнить коллекцию значениями температур масла и воды
+        /// Заполнить коллекцию значениями температур масла и воды из файла
         /// </summary>
-        private void InitTemps()
+        public bool InitTempsExs()
         {
-            for (int i = 0; i < tempOil.Count; i++)
+            // получить данные из файла
+            if (exsel.ReceiveData() != null)
             {
-                temps.Add(new TestData(tempOil[i], tempWater[i]));
+                var excelData = exsel.ReceiveData();
+
+                for (int i = 2; i < excelData.GetUpperBound(0) + 1; i++)
+                {
+                    temps.Add(new TestData((sbyte)excelData[i, 1], (sbyte)excelData[i, 2]));
+                }
+
+                // файл прочитан
+                return true;
             }
+            else
+                // файл не прочитан
+                return false;
         }
 
         /// <summary>
@@ -119,31 +98,20 @@ namespace CoolingSystemElips
         /// <returns>исчерпано число элементов спика</returns>
         public bool GetTemps(ref sbyte to, ref sbyte tw)
         {
-            if (Counter < temps.Count()) 
+            if (Counter < temps.Count())
             {
                 to = temps[Counter].TempOil;
                 tw = temps[Counter].TempWater;
                 Counter++;
                 return false;
             }
-            else 
+            else
             {
                 return true;
             }
         }
 
         #endregion
-    }
-
-    class TestData
-    {
-        public sbyte TempWater { get; set; }
-        public sbyte TempOil { get; set; }
-        public TestData(sbyte to, sbyte tw)
-        {
-            TempOil = to;
-            TempWater = tw;
-        }
     }
 
 }

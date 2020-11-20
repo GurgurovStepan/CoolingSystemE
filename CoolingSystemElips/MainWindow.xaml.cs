@@ -30,7 +30,7 @@ namespace CoolingSystemElips
         MotorControl motorControl = new MotorControl();
         System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
         Test mainTest;
-
+        
         /// <summary>
         /// Изменить значение температуры масла
         /// </summary>
@@ -56,8 +56,8 @@ namespace CoolingSystemElips
         public static void StatusOnChanged(object sender, EventArgs e)
         {
             Motor motor = (Motor)sender;
-            
-            if (motor.StatusOn) 
+
+            if (motor.StatusOn)
             {
                 motor.CalculationNumberStarts();
             }
@@ -110,11 +110,8 @@ namespace CoolingSystemElips
         {
             if (selectTest.Value != null)
             {
-                mainTest = new Test(sbyte.Parse(selectTest.Value.ToString()));
-                timer.Interval = new TimeSpan(0, 0, mainTest.TestRate);
-
-                statusTest.Minimum = 0;
-                statusTest.Maximum = mainTest.GetMaxNumberElements();
+                // установить интенсивность теста
+                timer.Interval = new TimeSpan(0, 0, mainTest.TestRate = (sbyte.Parse(selectTest.Value.ToString())));
             }
         }
 
@@ -123,17 +120,31 @@ namespace CoolingSystemElips
         /// </summary>
         private void startStopTest_Checked(object sender, RoutedEventArgs e)
         {
-            startStopTest.Content = "Завершить тест";
-            tempOil.IsEnabled = false;
-            tempWater.IsEnabled = false;
-            timer.Start();
+            if (mainTest.Ready)
+            {
+                startStopTest.Content = "Завершить тест";
+                
+                // задать минимальное и максимальное значение ProgressBar
+                statusTest.Minimum = 0;
+                statusTest.Maximum = mainTest.GetMaxNumberElements();
+                // запретить ручное управление
+                tempOil.IsEnabled = false;
+                tempWater.IsEnabled = false;
+                // запустить тест
+                timer.Start();
+            }
+            else
+            {
+                startStopTest.Content = "Подготовить тест";
+                startStopTest.IsChecked = true;
+            }
         }
         /// <summary>
         /// Прекратить тест (остановить?)
         /// </summary>
         private void startStopTest_Unchecked(object sender, RoutedEventArgs e)
         {
-            startStopTest.Content = "Запустить тест";
+            startStopTest.Content = "Выполнить тест";
             tempOil.IsEnabled = true;
             tempWater.IsEnabled = true;
             timer.Stop();
@@ -212,12 +223,12 @@ namespace CoolingSystemElips
                 mainTest.GetCurTemps();
                 tempOil.Value = mainTest.CurTempOil;
                 tempWater.Value = mainTest.CurTempWater;
-                
+
                 statusTest.Value = mainTest.GetCurrentCounter();
             }
         }
 
-        private void testСompleted() 
+        private void testСompleted()
         {
             string mes = "Тест завершен!\n" +
                 "Сбросить статистику?";
@@ -233,13 +244,18 @@ namespace CoolingSystemElips
 
             }
         }
-    
+
         private void ResetStatisticsMotor()
         {
             foreach (var m in motor)
             {
                 m.ResStatsMotor();
             }
+        }
+
+        private void prepareTest_Click(object sender, RoutedEventArgs e)
+        {
+            mainTest = new Test(1);
         }
     }
 }
